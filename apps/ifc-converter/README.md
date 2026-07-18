@@ -31,7 +31,7 @@ JSON to load into the Pascal editor.
 ## Develop
 
 ```bash
-bun dev   # from this directory, or `turbo run dev` at the repo root
+pnpm dev   # from this directory, or `turbo run dev` at the repo root
 ```
 
 The `web-ifc.wasm` binary is copied into `public/` automatically on

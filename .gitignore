@@ -3,6 +3,8 @@
 # Dependencies
 node_modules
 package-lock.json
+yarn.lock
+bun.lock
 .pnp
 .pnp.js
 

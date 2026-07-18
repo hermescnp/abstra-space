@@ -66,7 +66,7 @@ import {
 } from '../lib/snapping-mode'
 import useInteractionScope from './use-interaction-scope'
 
-const DEFAULT_ACTIVE_SIDEBAR_PANEL = 'build'
+const DEFAULT_ACTIVE_SIDEBAR_PANEL = 'site'
 const DEFAULT_FLOORPLAN_PANE_RATIO = 0.5
 const MIN_FLOORPLAN_PANE_RATIO = 0.15
 const MAX_FLOORPLAN_PANE_RATIO = 0.85

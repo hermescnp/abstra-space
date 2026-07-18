@@ -5,16 +5,77 @@ import { useIsMobile } from '../../hooks/use-mobile'
 import useEditor from '../../store/use-editor'
 
 import { useSidebarStore } from '../ui/primitives/sidebar'
-import { IconRail, type SidebarTab } from '../ui/sidebar/tab-bar'
+import {
+  SidebarCollapsedRail,
+  SidebarPanelTabs,
+  type SidebarTab,
+} from '../ui/sidebar/tab-bar'
 import { EditorLayoutMobile } from './editor-layout-mobile'
 
-const SIDEBAR_MIN_WIDTH = 300
-const SIDEBAR_MAX_WIDTH = 800
-const SIDEBAR_COLLAPSE_THRESHOLD = 220
-// Matches the `w-14` rail in <IconRail>; the resize math is relative to it.
-const RAIL_WIDTH = 56
+const SIDEBAR_MIN_WIDTH = 260
+const SIDEBAR_MAX_WIDTH = 520
+const SIDEBAR_RAIL_WIDTH = 40
 
-// ── Left column: resizable panel with tab bar ────────────────────────────────
+// ── Sidebar tab + collapse controls ──────────────────────────────────────────
+
+function useSidebarTabControls(tabs: SidebarTab[]) {
+  const width = useSidebarStore((s) => s.width)
+  const isCollapsed = useSidebarStore((s) => s.isCollapsed)
+  const setIsCollapsed = useSidebarStore((s) => s.setIsCollapsed)
+  const setWidth = useSidebarStore((s) => s.setWidth)
+  const activePanel = useEditor((s) => s.activeSidebarPanel)
+  const setActivePanel = useEditor((s) => s.setActiveSidebarPanel)
+
+  // Ensure active panel is a valid tab
+  useEffect(() => {
+    if (tabs.length > 0 && !tabs.some((t) => t.id === activePanel)) {
+      setActivePanel(tabs[0]!.id)
+    }
+  }, [tabs, activePanel, setActivePanel])
+
+  // Leaving Models/Items (or collapsing) should disarm any armed build/plant tool
+  useEffect(() => {
+    if (activePanel === 'items' && !isCollapsed) return
+    const { mode, setMode, setTool } = useEditor.getState()
+    if (mode === 'build' || mode === 'material-paint') {
+      setMode('select')
+      setTool(null)
+    }
+  }, [activePanel, isCollapsed])
+
+  const expandToTab = useCallback(
+    (id: string) => {
+      setIsCollapsed(false)
+      if (width < SIDEBAR_MIN_WIDTH) setWidth(SIDEBAR_MIN_WIDTH)
+      setActivePanel(id)
+    },
+    [width, setIsCollapsed, setWidth, setActivePanel],
+  )
+
+  const handleTabChange = useCallback(
+    (id: string) => {
+      if (isCollapsed) {
+        expandToTab(id)
+        return
+      }
+      setActivePanel(id)
+    },
+    [isCollapsed, expandToTab, setActivePanel],
+  )
+
+  const collapse = useCallback(() => {
+    setIsCollapsed(true)
+  }, [setIsCollapsed])
+
+  const expand = useCallback(() => {
+    setIsCollapsed(false)
+    if (width < SIDEBAR_MIN_WIDTH) setWidth(SIDEBAR_MIN_WIDTH)
+  }, [width, setIsCollapsed, setWidth])
+
+  return { activePanel, isCollapsed, handleTabChange, collapse, expand, expandToTab }
+}
+
+// ── Left column: Golden Papers-style panel with in-panel tabs ────────────────
 
 function LeftColumn({
   tabs,
@@ -26,40 +87,13 @@ function LeftColumn({
   sidebarOverlay?: ReactNode
 }) {
   const width = useSidebarStore((s) => s.width)
-  const isCollapsed = useSidebarStore((s) => s.isCollapsed)
-  const setIsCollapsed = useSidebarStore((s) => s.setIsCollapsed)
   const setWidth = useSidebarStore((s) => s.setWidth)
   const isDragging = useSidebarStore((s) => s.isDragging)
   const setIsDragging = useSidebarStore((s) => s.setIsDragging)
-  const activePanel = useEditor((s) => s.activeSidebarPanel)
-  const setActivePanel = useEditor((s) => s.setActiveSidebarPanel)
+  const { activePanel, isCollapsed, handleTabChange, collapse, expand, expandToTab } =
+    useSidebarTabControls(tabs)
 
   const isResizing = useRef(false)
-
-  // Ensure active panel is a valid tab
-  useEffect(() => {
-    if (tabs.length > 0 && !tabs.some((t) => t.id === activePanel)) {
-      setActivePanel(tabs[0]!.id)
-    }
-  }, [tabs, activePanel, setActivePanel])
-
-  // Leaving the items tab while furnishing should drop back to select mode
-  useEffect(() => {
-    if (activePanel === 'items') return
-    const { phase, mode, setMode } = useEditor.getState()
-    if (phase === 'furnish' && mode === 'build') {
-      setMode('select')
-    }
-  }, [activePanel])
-
-  // Closing (collapsing) the sidebar disarms any build tool back to select
-  useEffect(() => {
-    if (!isCollapsed) return
-    const { mode, setMode } = useEditor.getState()
-    if (mode === 'build') {
-      setMode('select')
-    }
-  }, [isCollapsed])
 
   const handleResizerDown = useCallback(
     (e: React.PointerEvent) => {
@@ -72,37 +106,11 @@ function LeftColumn({
     [setIsDragging],
   )
 
-  // Rail click: reopen a collapsed panel, collapse when re-clicking the open
-  // tab, otherwise switch tabs. Reopening clamps below-min persisted widths
-  // up to the minimum so the panel always returns to a usable size.
-  const handleRailClick = useCallback(
-    (id: string) => {
-      if (isCollapsed) {
-        setIsCollapsed(false)
-        if (width < SIDEBAR_MIN_WIDTH) setWidth(SIDEBAR_MIN_WIDTH)
-        setActivePanel(id)
-        return
-      }
-      if (id === activePanel) {
-        setIsCollapsed(true)
-        return
-      }
-      setActivePanel(id)
-    },
-    [isCollapsed, width, activePanel, setIsCollapsed, setWidth, setActivePanel],
-  )
-
   useEffect(() => {
     const handlePointerMove = (e: PointerEvent) => {
       if (!isResizing.current) return
-      // Rail occupies the leftmost 48px; the panel starts after it.
-      const newWidth = e.clientX - RAIL_WIDTH
-      if (newWidth < SIDEBAR_COLLAPSE_THRESHOLD) {
-        setIsCollapsed(true)
-      } else {
-        setIsCollapsed(false)
-        setWidth(Math.max(SIDEBAR_MIN_WIDTH, Math.min(newWidth, SIDEBAR_MAX_WIDTH)))
-      }
+      const newWidth = e.clientX
+      setWidth(Math.max(SIDEBAR_MIN_WIDTH, Math.min(newWidth, SIDEBAR_MAX_WIDTH)))
     }
     const handlePointerUp = () => {
       isResizing.current = false
@@ -116,38 +124,48 @@ function LeftColumn({
       window.removeEventListener('pointermove', handlePointerMove)
       window.removeEventListener('pointerup', handlePointerUp)
     }
-  }, [setWidth, setIsCollapsed, setIsDragging])
+  }, [setWidth, setIsDragging])
+
+  if (isCollapsed) {
+    return (
+      <div className="relative z-10 flex h-full shrink-0 bg-sidebar text-sidebar-foreground">
+        <SidebarCollapsedRail
+          onExpand={expand}
+          onTabClick={expandToTab}
+          tabs={tabs}
+        />
+      </div>
+    )
+  }
 
   return (
-    <div className="relative z-10 flex h-full flex-shrink-0 bg-sidebar text-sidebar-foreground">
-      <IconRail
-        activeTab={activePanel}
-        collapsed={isCollapsed}
-        onIconClick={handleRailClick}
-        tabs={tabs}
-      />
-      {!isCollapsed && (
-        <div
-          className="relative flex h-full flex-col"
-          style={{
-            width,
-            transition: isDragging ? 'none' : 'width 150ms ease',
-          }}
-        >
-          <div className="relative flex flex-1 flex-col overflow-hidden">
-            {renderTabContent(activePanel)}
-            {sidebarOverlay && <div className="absolute inset-0 z-50">{sidebarOverlay}</div>}
-          </div>
-
-          {/* Resize handle + hit area */}
-          <div
-            className="absolute inset-y-0 -right-3 z-[100] flex w-6 cursor-col-resize items-center justify-center"
-            onPointerDown={handleResizerDown}
-          >
-            <div className="h-8 w-1 rounded-full bg-neutral-500" />
-          </div>
+    <div className="relative z-10 flex h-full shrink-0 bg-sidebar text-sidebar-foreground">
+      <div
+        className="relative flex h-full flex-col border-border/50 border-r"
+        style={{
+          width,
+          transition: isDragging ? 'none' : 'width 150ms ease',
+        }}
+      >
+        <SidebarPanelTabs
+          activeTab={activePanel}
+          onCollapse={collapse}
+          onTabChange={handleTabChange}
+          tabs={tabs}
+        />
+        <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden">
+          {renderTabContent(activePanel)}
+          {sidebarOverlay && <div className="absolute inset-0 z-50">{sidebarOverlay}</div>}
         </div>
-      )}
+
+        {/* Resize handle + hit area */}
+        <div
+          className="absolute inset-y-0 -right-3 z-[100] flex w-6 cursor-col-resize items-center justify-center"
+          onPointerDown={handleResizerDown}
+        >
+          <div className="h-8 w-1 rounded-full bg-neutral-500" />
+        </div>
+      </div>
     </div>
   )
 }
@@ -231,6 +249,7 @@ export function EditorLayoutV2({
 }: EditorLayoutV2Props) {
   const isCaptureMode = useEditor((s) => s.isCaptureMode)
   const isMobile = useIsMobile()
+  const showSidebar = !isCaptureMode && sidebarTabs.length > 0
 
   if (isMobile) {
     return (
@@ -249,12 +268,20 @@ export function EditorLayoutV2({
 
   return (
     <div className="dark flex h-full w-full flex-col bg-sidebar text-foreground">
-      {/* Top navbar */}
-      {navbarSlot}
+      {/* Top navbar: host content only (sidebar tabs live in the left panel) */}
+      <header className="relative z-50 h-14 shrink-0 overflow-visible border-border border-b">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80"
+        />
+        <div className="relative flex h-full items-center gap-3 overflow-visible px-4">
+          <div className="min-w-0 flex-1">{navbarSlot}</div>
+        </div>
+      </header>
 
       {/* Main content: left column + right column */}
       <div className="flex min-h-0 flex-1">
-        {!isCaptureMode && sidebarTabs.length > 0 && (
+        {showSidebar && (
           <LeftColumn
             renderTabContent={renderTabContent}
             sidebarOverlay={sidebarOverlay}
@@ -273,3 +300,5 @@ export function EditorLayoutV2({
     </div>
   )
 }
+
+export { SIDEBAR_RAIL_WIDTH }

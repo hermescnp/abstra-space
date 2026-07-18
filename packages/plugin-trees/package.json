@@ -1,7 +1,7 @@
 {
   "name": "@pascal-app/plugin-trees",
   "version": "0.1.0",
-  "description": "First-party example Pascal editor plugin — a procedural trees node with a presets rail panel. Structurally identical to a third-party plugin (peer-deps on @pascal-app/*).",
+  "description": "First-party example Pascal editor plugin \u2014 a procedural trees node with a presets rail panel. Structurally identical to a third-party plugin (peer-deps on @pascal-app/*).",
   "type": "module",
   "main": "./src/index.ts",
   "types": "./src/index.ts",
@@ -32,10 +32,10 @@
     "zustand": "^5"
   },
   "devDependencies": {
-    "@pascal-app/core": "*",
-    "@pascal-app/editor": "*",
-    "@pascal-app/viewer": "*",
-    "@pascal/typescript-config": "*",
+    "@pascal-app/core": "workspace:*",
+    "@pascal-app/editor": "workspace:*",
+    "@pascal-app/viewer": "workspace:*",
+    "@pascal/typescript-config": "workspace:*",
     "@react-three/fiber": "^9",
     "@types/node": "^22.19.12",
     "@types/react": "^19.2.2",

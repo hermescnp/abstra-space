@@ -30,7 +30,9 @@ const nextConfig: NextConfig = {
     },
   },
   images: {
-    unoptimized: process.env.NEXT_PUBLIC_ASSETS_CDN_URL?.startsWith('http://localhost') ?? false,
+    // Always serve public icon assets as-is so local recolors aren't stuck
+    // behind the Next image optimizer cache.
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',

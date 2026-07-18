@@ -14,7 +14,7 @@ export default function TermsPage() {
           <nav className="flex items-center gap-4 text-sm">
             <Link
               className="text-muted-foreground transition-colors hover:text-foreground"
-              href="/"
+              href="/studio"
             >
               Home
             </Link>

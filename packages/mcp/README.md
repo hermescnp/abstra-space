@@ -3,7 +3,7 @@
 Model Context Protocol server for the Pascal 3D editor. Drives the
 `@pascal-app/core` scene graph from any MCP-compatible AI host.
 
-The server runs headlessly in Bun with no browser, WebGPU, React, or external
+The server runs headlessly with no browser, WebGPU, React, or external
 database service. It exposes the same scene mutations used by the editor UI
 (create walls, place items, cut openings, undo, etc.) as MCP tools, resources,
 and prompts.
@@ -11,20 +11,19 @@ and prompts.
 ## Install
 
 ```bash
-bun add @pascal-app/mcp
+pnpm add @pascal-app/mcp
 ```
 
-`@pascal-app/core` is a peer dependency; Bun workspaces resolve it automatically.
-The MCP CLI is intended to run with Bun. When the storage package is consumed by
-the Next.js editor server, it opens the same local database through Node's
-built-in SQLite driver.
+`@pascal-app/core` is a peer dependency; the monorepo workspace resolves it
+automatically. When the storage package is consumed by the Next.js editor
+server, it opens the same local database through Node's built-in SQLite driver.
 
 ## Quick start
 
 Launch the server over stdio in one line:
 
 ```bash
-bunx pascal-mcp
+npx pascal-mcp
 ```
 
 Load an initial scene from disk:
@@ -63,10 +62,10 @@ During workspace development, run both sides with the same data directory:
 
 ```bash
 # Terminal 1: run the editor
-PASCAL_DATA_DIR="$HOME/.pascal/data" bun run dev
+PASCAL_DATA_DIR="$HOME/.pascal/data" pnpm dev
 
 # Terminal 2 or an MCP host: run the server
-PASCAL_DATA_DIR="$HOME/.pascal/data" bun packages/mcp/dist/bin/pascal-mcp.js
+PASCAL_DATA_DIR="$HOME/.pascal/data" node packages/mcp/dist/bin/pascal-mcp.js
 ```
 
 ## Live editor updates
@@ -98,7 +97,7 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json`
 {
   "mcpServers": {
     "pascal": {
-      "command": "bunx",
+      "command": "npx",
       "args": ["pascal-mcp"],
       "env": {
         "PASCAL_DATA_DIR": "/Users/you/.pascal/data"
@@ -108,7 +107,7 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json`
 }
 ```
 
-If `bunx` is not on your PATH, point `command` at the absolute path to `bun`
+If `npx` is not on your PATH, point `command` at `node`
 and pass the built `dist/bin/pascal-mcp.js` file as the first arg.
 
 ## Claude Code config
@@ -116,7 +115,7 @@ and pass the built `dist/bin/pascal-mcp.js` file as the first arg.
 Via the CLI:
 
 ```bash
-claude mcp add pascal bunx pascal-mcp
+claude mcp add pascal npx pascal-mcp
 ```
 
 Or add to `.mcp.json` at the repo root:
@@ -125,7 +124,7 @@ Or add to `.mcp.json` at the repo root:
 {
   "mcpServers": {
     "pascal": {
-      "command": "bunx",
+      "command": "npx",
       "args": ["pascal-mcp"],
       "env": {
         "PASCAL_DATA_DIR": "/Users/you/.pascal/data"
@@ -142,7 +141,7 @@ the built binary:
 {
   "mcpServers": {
     "pascal": {
-      "command": "bun",
+      "command": "node",
       "args": ["/absolute/path/to/editor/packages/mcp/dist/bin/pascal-mcp.js"],
       "env": {
         "PASCAL_DATA_DIR": "/Users/you/.pascal/data"
@@ -157,23 +156,23 @@ the built binary:
 Via the CLI:
 
 ```bash
-codex mcp add pascal --env PASCAL_DATA_DIR="$HOME/.pascal/data" -- bunx pascal-mcp
+codex mcp add pascal --env PASCAL_DATA_DIR="$HOME/.pascal/data" -- npx pascal-mcp
 ```
 
 For local workspace testing before publish:
 
 ```bash
-bun run --cwd packages/mcp build
+pnpm --dir packages/mcp run build
 codex mcp add pascal-dev \
   --env PASCAL_DATA_DIR="$HOME/.pascal/data" \
-  -- bun "$PWD/packages/mcp/dist/bin/pascal-mcp.js"
+  -- node "$PWD/packages/mcp/dist/bin/pascal-mcp.js"
 ```
 
 This writes an entry like this to `~/.codex/config.toml`:
 
 ```toml
 [mcp_servers.pascal-dev]
-command = "bun"
+command = "node"
 args = ["/absolute/path/to/editor/packages/mcp/dist/bin/pascal-mcp.js"]
 
 [mcp_servers.pascal-dev.env]
@@ -188,7 +187,7 @@ In Cursor settings (`settings.json`):
 {
   "mcp.servers": {
     "pascal": {
-      "command": "bunx",
+      "command": "npx",
       "args": ["pascal-mcp"],
       "env": {
         "PASCAL_DATA_DIR": "/Users/you/.pascal/data"
@@ -385,15 +384,15 @@ The vision tools require the MCP host to support the sampling capability
 ## Development
 
 ```bash
-bun install
-bun run --cwd packages/mcp build
-bun test
+pnpm install
+pnpm --dir packages/mcp run build
+bun test  # requires Bun — tests use bun:test
 ```
 
 Smoke-test the stdio binary end-to-end:
 
 ```bash
-bun run --cwd packages/mcp smoke
+pnpm --dir packages/mcp run smoke
 ```
 
 ## License

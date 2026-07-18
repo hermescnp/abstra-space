@@ -22,8 +22,8 @@ Stop if:
 Run a build sanity check if the change is non-trivial:
 
 ```bash
-bun typecheck
-bun build
+pnpm check-types
+pnpm build
 ```
 
 Don't open the PR with a broken build.
@@ -77,8 +77,8 @@ gh pr create --title "short, scope-prefixed title" --body "$(cat <<'EOF'
 
 ## Checklist
 
-- [x] I've tested this locally with `bun dev`
-- [x] My code follows the existing code style (run `bun check` to verify)
+- [x] I've tested this locally with `pnpm dev`
+- [x] My code follows the existing code style (run `pnpm check` to verify)
 - [ ] I've updated relevant documentation (if applicable)
 - [x] This PR targets the `main` branch
 EOF

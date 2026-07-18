@@ -79,7 +79,7 @@ import { WallMeasurementLabel } from './wall-measurement-label'
 import { WallMoveSideHandles } from './wall-move-side-handles'
 import { WallOpeningHighlights } from './wall-opening-highlights'
 
-const CAMERA_CONTROLS_HINT_DISMISSED_STORAGE_KEY = 'editor-camera-controls-hint-dismissed:v1'
+const CAMERA_CONTROLS_HINT_DISMISSED_STORAGE_KEY = 'editor-camera-controls-hint-dismissed:v2'
 const DELETE_CURSOR_BADGE_COLOR = '#ef4444'
 const DELETE_CURSOR_BADGE_OFFSET_X = 14
 const DELETE_CURSOR_BADGE_OFFSET_Y = 14
@@ -136,6 +136,11 @@ export interface EditorProps {
   // UI slots (v2)
   navbarSlot?: ReactNode
   sidebarTabs?: (SidebarTab & { component: React.ComponentType })[]
+  /**
+   * When false, registered host panels (e.g. Nature) are not auto-appended as
+   * extra sidebar tabs. Defaults to true so existing embeddings keep working.
+   */
+  includeRegisteredSidebarPanels?: boolean
   viewerToolbarLeft?: ReactNode
   viewerToolbarRight?: ReactNode
   /**
@@ -360,14 +365,18 @@ const EDITOR_CAMERA_CONTROL_HINTS: CameraControlHint[] = [
   {
     action: 'Pan',
     keys: [{ value: 'Space' }, { value: 'Left click' }],
-    alternativeKeys: [{ value: 'Middle click' }],
+    alternativeKeys: [{ value: 'Shift' }, { value: 'Right click' }],
   },
   { action: 'Rotate', keys: [{ value: 'Right click' }] },
   { action: 'Zoom', keys: [{ value: 'Scroll' }] },
 ]
 
 const PREVIEW_CAMERA_CONTROL_HINTS: CameraControlHint[] = [
-  { action: 'Pan', keys: [{ value: 'Left click' }] },
+  {
+    action: 'Pan',
+    keys: [{ value: 'Left click' }],
+    alternativeKeys: [{ value: 'Shift' }, { value: 'Right click' }],
+  },
   { action: 'Rotate', keys: [{ value: 'Right click' }] },
   { action: 'Zoom', keys: [{ value: 'Scroll' }] },
 ]
@@ -392,6 +401,10 @@ const CAMERA_SHORTCUT_KEY_META: Record<string, { icon?: string; label: string; t
   Space: {
     icon: 'lucide:space',
     label: 'Space',
+  },
+  Shift: {
+    label: 'Shift',
+    text: '⇧',
   },
 }
 
@@ -1087,6 +1100,7 @@ export default function Editor({
   sidebarTop,
   navbarSlot,
   sidebarTabs,
+  includeRegisteredSidebarPanels = true,
   viewerToolbarLeft,
   viewerToolbarRight,
   stageOverlay,
@@ -1318,10 +1332,11 @@ export default function Editor({
   if (layoutVersion === 'v2') {
     // Registered host panels join the host's `sidebarTabs` as first-class tabs.
     // Explicit tabs keep precedence because they are already in the map first.
+    const registeredPanels = includeRegisteredSidebarPanels ? hostRailPanels : []
     const tabMap = new Map<string, SidebarTab & { component: React.ComponentType }>(
       sidebarTabs?.map((t) => [t.id, t]) ?? [],
     )
-    for (const p of hostRailPanels) {
+    for (const p of registeredPanels) {
       if (!tabMap.has(p.id)) {
         tabMap.set(p.id, { id: p.id, label: p.label, icon: p.icon, component: p.component })
       }
@@ -1352,7 +1367,7 @@ export default function Editor({
       })) ?? []),
       // Host panels appear after the explicit tabs in the rail. The icon
       // doubles as the mobile icon; a half-height sheet is a sensible default.
-      ...hostRailPanels.map((p) => ({
+      ...registeredPanels.map((p) => ({
         id: p.id,
         label: p.label,
         mobileDefaultSnap: 0.5,

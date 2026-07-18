@@ -11,7 +11,6 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
   useEditor,
-  useSidebarStore,
   type ViewMode,
 } from '@pascal-app/editor'
 import {
@@ -24,8 +23,6 @@ import {
 import {
   Box,
   Check,
-  ChevronsLeft,
-  ChevronsRight,
   Columns2,
   Contrast,
   Eye,
@@ -86,7 +83,8 @@ const VIEW_MODES: { id: ViewMode; label: string; icon: React.ReactNode }[] = [
         alt=""
         className="h-3.5 w-3.5 object-contain"
         height={14}
-        src="/icons/building.webp"
+        src="/icons/building.webp?v=blue1"
+        unoptimized
         width={14}
       />
     ),
@@ -99,7 +97,8 @@ const VIEW_MODES: { id: ViewMode; label: string; icon: React.ReactNode }[] = [
         alt=""
         className="h-3.5 w-3.5 object-contain"
         height={14}
-        src="/icons/blueprint.webp"
+        src="/icons/blueprint.webp?v=blue1"
+        unoptimized
         width={14}
       />
     ),
@@ -121,10 +120,10 @@ const levelModeLabels: Record<string, string> = {
 
 const wallModeOrder = ['cutaway', 'up', 'down', 'translucent'] as const
 const wallModeConfig: Record<string, { icon: string; label: string }> = {
-  up: { icon: '/icons/room.webp', label: 'Full height' },
-  cutaway: { icon: '/icons/wallcut.webp', label: 'Cutaway' },
-  down: { icon: '/icons/walllow.webp', label: 'Low' },
-  translucent: { icon: '/icons/wall.webp', label: 'Translucent' },
+  up: { icon: '/icons/room.webp?v=blue1', label: 'Full height' },
+  cutaway: { icon: '/icons/wallcut.webp?v=blue1', label: 'Cutaway' },
+  down: { icon: '/icons/walllow.webp?v=blue1', label: 'Low' },
+  translucent: { icon: '/icons/wall.webp?v=blue1', label: 'Translucent' },
 }
 
 const SHADING_OPTIONS = [
@@ -160,34 +159,6 @@ function ViewModeControl() {
           </ToolbarTooltip>
         )
       })}
-    </div>
-  )
-}
-
-function CollapseSidebarButton() {
-  const isCollapsed = useSidebarStore((state) => state.isCollapsed)
-  const setIsCollapsed = useSidebarStore((state) => state.setIsCollapsed)
-
-  const toggle = useCallback(() => {
-    setIsCollapsed(!isCollapsed)
-  }, [isCollapsed, setIsCollapsed])
-
-  return (
-    <div className={TOOLBAR_CONTAINER}>
-      <ToolbarTooltip label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}>
-        <button
-          aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          className={TOOLBAR_BTN}
-          onClick={toggle}
-          type="button"
-        >
-          {isCollapsed ? (
-            <ChevronsRight className="h-4 w-4" />
-          ) : (
-            <ChevronsLeft className="h-4 w-4" />
-          )}
-        </button>
-      </ToolbarTooltip>
     </div>
   )
 }
@@ -258,7 +229,7 @@ function WallModeToggle() {
         onClick={cycle}
         type="button"
       >
-        <Image alt="" className="h-4 w-4 object-contain" height={16} src={config.icon} width={16} />
+        <Image alt="" className="h-4 w-4 object-contain" height={16} src={config.icon} unoptimized width={16} />
         <span className="font-medium text-xs">{config.label}</span>
       </button>
     </ToolbarTooltip>
@@ -503,12 +474,7 @@ function PreviewButton() {
 }
 
 export function CommunityViewerToolbarLeft() {
-  return (
-    <>
-      <CollapseSidebarButton />
-      <ViewModeControl />
-    </>
-  )
+  return <ViewModeControl />
 }
 
 export function CommunityViewerToolbarRight() {

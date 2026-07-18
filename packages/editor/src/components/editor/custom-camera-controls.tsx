@@ -724,7 +724,6 @@ export const CustomCameraControls = () => {
       if (!controls.current) return
 
       const shift = keyState.shiftRight || keyState.shiftLeft
-      const control = keyState.controlRight || keyState.controlLeft
       const space = keyState.space
 
       const wheelAction =
@@ -733,7 +732,10 @@ export const CustomCameraControls = () => {
           : CameraControlsImpl.ACTION.DOLLY
       controls.current.mouseButtons.wheel = wheelAction
       controls.current.mouseButtons.middle = CameraControlsImpl.ACTION.SCREEN_PAN
-      controls.current.mouseButtons.right = CameraControlsImpl.ACTION.ROTATE
+      // Blender-style: Shift turns the rotate button into pan.
+      controls.current.mouseButtons.right = shift
+        ? CameraControlsImpl.ACTION.SCREEN_PAN
+        : CameraControlsImpl.ACTION.ROTATE
       if (isPreviewMode) {
         // In preview mode, left-click is always pan (viewer-style)
         controls.current.mouseButtons.left = CameraControlsImpl.ACTION.SCREEN_PAN
@@ -809,13 +811,28 @@ export const CustomCameraControls = () => {
       if (event.code === 'ControlLeft') {
         keyState.controlLeft = false
       }
+      if (
+        !(keyState.shiftRight || keyState.shiftLeft) &&
+        panPointerButton === 2
+      ) {
+        panPointerId = null
+        panPointerButton = null
+        updateNavigationCursor()
+      }
       updateConfig()
     }
 
     const onPointerDown = (event: PointerEvent) => {
       if (!(event.target instanceof Node) || !gl.domElement.contains(event.target)) return
       clearPendingFloorplanNavigationPose()
-      if (event.button !== 1 && !(event.button === 0 && keyState.space)) return
+      const shift = keyState.shiftRight || keyState.shiftLeft
+      if (
+        event.button !== 1 &&
+        !(event.button === 0 && keyState.space) &&
+        !(event.button === 2 && shift)
+      ) {
+        return
+      }
 
       panPointerId = event.pointerId
       panPointerButton = event.button

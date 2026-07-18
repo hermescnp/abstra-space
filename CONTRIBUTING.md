@@ -6,15 +6,16 @@ Thanks for your interest in contributing! We welcome all kinds of contributions 
 
 ### Prerequisites
 
-- [Bun](https://bun.sh/) 1.3+ (or Node.js 18+)
+- [pnpm](https://pnpm.io/) 9+ and Node.js 18+
+- [Bun](https://bun.sh/) 1.3+ (optional — only needed to run unit tests)
 
 ### Setup
 
 ```bash
 git clone https://github.com/pascalorg/editor.git
 cd editor
-bun install
-bun dev
+pnpm install
+pnpm dev
 ```
 
 The editor will be running at **http://localhost:3000**. That's it!
@@ -30,8 +31,8 @@ Copy `.env.example` to `.env` and add a Google Maps API key if you want address 
 We use [Biome](https://biomejs.dev/) for linting and formatting. Before submitting a PR:
 
 ```bash
-bun check        # Check for issues
-bun check:fix    # Auto-fix issues
+pnpm check        # Check for issues
+pnpm check:fix    # Auto-fix issues
 ```
 
 ### Project structure
@@ -51,8 +52,8 @@ New node kinds and sidebar panels can ship as a plugin instead of editing the bu
 ## Submitting a PR
 
 1. **Fork the repo** and create a branch from `main`
-2. **Make your changes** and test locally with `bun dev`
-3. **Run `bun check`** to make sure linting passes
+2. **Make your changes** and test locally with `pnpm dev`
+3. **Run `pnpm check`** to make sure linting passes
 4. **Open a PR** with a clear description of what changed and why
 5. **Link related issues** if applicable (e.g., "Fixes #42")
 

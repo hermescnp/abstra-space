@@ -42,8 +42,10 @@ export function ActionMenu({ className }: { className?: string }) {
       <motion.div
         className={cn(
           'left-1/2 z-50 -translate-x-1/2',
-          isMobile ? 'absolute origin-bottom scale-90' : 'fixed bottom-6',
-          'rounded-2xl border border-border bg-background/90 shadow-2xl backdrop-blur-md',
+          isMobile
+            ? 'absolute origin-bottom scale-90 rounded-2xl border border-border'
+            : 'fixed bottom-0 rounded-t-2xl rounded-b-none border border-border border-b-0',
+          'bg-background shadow-2xl backdrop-blur-md',
           'transition-colors duration-200 ease-out',
           className,
         )}

@@ -2,13 +2,15 @@
 
 ## Prerequisites
 
-- [Bun](https://bun.sh/) 1.3+ (or Node.js 18+)
+- [pnpm](https://pnpm.io/) 9+ (via [Corepack](https://nodejs.org/api/corepack.html): `corepack enable`)
+- Node.js 18+
+- [Bun](https://bun.sh/) 1.3+ (optional — only needed to run the `bun:test` unit test suite)
 
 ## Quick Start
 
 ```bash
-bun install
-bun dev
+pnpm install
+pnpm dev
 ```
 
 The editor will be running at **http://localhost:3000**.
@@ -44,11 +46,11 @@ The editor works fully without any environment variables.
 
 | Command | Description |
 |---------|-------------|
-| `bun dev` | Start the development server |
-| `bun build` | Build all packages |
-| `bun check` | Lint and format check (Biome) |
-| `bun check:fix` | Auto-fix lint and format issues |
-| `bun check-types` | TypeScript type checking |
+| `pnpm dev` | Start the development server |
+| `pnpm build` | Build all packages |
+| `pnpm check` | Lint and format check (Biome) |
+| `pnpm check:fix` | Auto-fix lint and format issues |
+| `pnpm check-types` | TypeScript type checking |
 
 ## Contributing
 

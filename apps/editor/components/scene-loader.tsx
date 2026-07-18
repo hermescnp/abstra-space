@@ -6,15 +6,13 @@
 import {
   applySceneGraphToEditor,
   Editor,
+  type SaveStatus,
   type SceneGraph,
-  type SidebarTab,
 } from '@pascal-app/editor'
-import { Hammer, Layers } from 'lucide-react'
-import Image from 'next/image'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { BuildTab } from './build-tab'
+import { EditorAppHeader } from './editor-app-header'
+import { EDITOR_SIDEBAR_TABS } from './editor-sidebar-tabs'
 import { CommunityViewerToolbarLeft, CommunityViewerToolbarRight } from './viewer-toolbar'
 
 export interface SceneMeta {
@@ -29,41 +27,6 @@ export interface SceneMeta {
   sizeBytes: number
   nodeCount: number
 }
-
-const SIDEBAR_TABS: (SidebarTab & { component: React.ComponentType })[] = [
-  {
-    id: 'site',
-    label: 'Scene',
-    component: () => null, // Built-in SitePanel handles this
-    mobileDefaultSnap: 0.5,
-    mobileIcon: <Layers className="h-5 w-5" />,
-    icon: (
-      <Image
-        alt=""
-        className="h-8 w-8 object-contain"
-        height={32}
-        src="/icons/scene.webp"
-        width={32}
-      />
-    ),
-  },
-  {
-    id: 'build',
-    label: 'Build',
-    component: BuildTab,
-    mobileDefaultSnap: 0.5,
-    mobileIcon: <Hammer className="h-5 w-5" />,
-    icon: (
-      <Image
-        alt=""
-        className="h-8 w-8 object-contain"
-        height={32}
-        src="/icons/build.webp"
-        width={32}
-      />
-    ),
-  },
-]
 
 interface SceneLoaderProps {
   initialScene: SceneGraph
@@ -98,6 +61,17 @@ export function SceneLoader({ initialScene, meta }: SceneLoaderProps) {
   const suppressRemoteSaveUntilRef = useRef(0)
   const [conflict, setConflict] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
+  const [sceneName, setSceneName] = useState(meta.name)
+  const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle')
+  const sceneNameRef = useRef(sceneName)
+
+  useEffect(() => {
+    sceneNameRef.current = sceneName
+  }, [sceneName])
+
+  useEffect(() => {
+    setSceneName(meta.name)
+  }, [meta.name])
 
   const handleLoad = useCallback(async () => initialScene, [initialScene])
 
@@ -119,7 +93,7 @@ export function SceneLoader({ initialScene, meta }: SceneLoaderProps) {
             'Content-Type': 'application/json',
             'If-Match': String(versionRef.current),
           },
-          body: JSON.stringify({ name: meta.name, graph }),
+          body: JSON.stringify({ name: sceneNameRef.current, graph }),
           // `keepalive` lets the request outlive a page unload (the autosave
           // flush on refresh/close). Browsers cap keepalive bodies at 64KB, so
           // only the unload flush opts in — normal debounced saves omit it and
@@ -139,12 +113,57 @@ export function SceneLoader({ initialScene, meta }: SceneLoaderProps) {
 
         const next = (await response.json()) as SceneMeta
         versionRef.current = next.version
+        if (next.name) setSceneName(next.name)
         setSaveError(null)
       } catch (error) {
         setSaveError(error instanceof Error ? error.message : 'Save failed')
       }
     },
-    [meta.id, meta.name],
+    [meta.id],
+  )
+
+  const handleNameChange = useCallback(
+    async (nextName: string) => {
+      const previous = sceneNameRef.current
+      setSceneName(nextName)
+      sceneNameRef.current = nextName
+
+      try {
+        const response = await fetch(`/api/scenes/${meta.id}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'If-Match': String(versionRef.current),
+          },
+          body: JSON.stringify({ name: nextName }),
+        })
+
+        if (response.status === 409) {
+          setSceneName(previous)
+          sceneNameRef.current = previous
+          setConflict(true)
+          return
+        }
+
+        if (!response.ok) {
+          setSceneName(previous)
+          sceneNameRef.current = previous
+          setSaveError(`Rename failed (${response.status})`)
+          return
+        }
+
+        const next = (await response.json()) as SceneMeta
+        versionRef.current = next.version
+        setSceneName(next.name)
+        sceneNameRef.current = next.name
+        setSaveError(null)
+      } catch (error) {
+        setSceneName(previous)
+        sceneNameRef.current = previous
+        setSaveError(error instanceof Error ? error.message : 'Rename failed')
+      }
+    },
+    [meta.id],
   )
 
   useEffect(() => {
@@ -194,7 +213,7 @@ export function SceneLoader({ initialScene, meta }: SceneLoaderProps) {
   return (
     <div className="relative h-screen w-screen">
       {conflict && (
-        <div className="pointer-events-auto absolute top-4 left-1/2 z-50 w-full max-w-md -translate-x-1/2 rounded-lg border border-border bg-background p-4 shadow-xl">
+        <div className="pointer-events-auto absolute top-16 left-1/2 z-50 w-full max-w-md -translate-x-1/2 rounded-lg border border-border bg-background p-4 shadow-xl">
           <h2 className="font-semibold text-sm">Another session saved first — refresh?</h2>
           <p className="mt-1 text-muted-foreground text-xs">
             Your changes haven&apos;t been saved. Reload to pick up the latest version.
@@ -218,25 +237,27 @@ export function SceneLoader({ initialScene, meta }: SceneLoaderProps) {
         </div>
       )}
       {saveError && !conflict && (
-        <div className="pointer-events-auto absolute top-4 left-1/2 z-50 w-full max-w-md -translate-x-1/2 rounded-lg border border-destructive/50 bg-background p-3 shadow-xl">
+        <div className="pointer-events-auto absolute top-16 left-1/2 z-50 w-full max-w-md -translate-x-1/2 rounded-lg border border-destructive/50 bg-background p-3 shadow-xl">
           <p className="font-medium text-destructive text-xs">{saveError}</p>
         </div>
       )}
-      <div className="pointer-events-none absolute top-4 right-4 z-40 flex items-center gap-2">
-        <Link
-          className="pointer-events-auto rounded-md border border-border bg-background/90 px-3 py-1.5 font-medium text-xs shadow-sm backdrop-blur hover:bg-accent/40"
-          href="/scenes"
-        >
-          All scenes
-        </Link>
-      </div>
       <Editor
+        includeRegisteredSidebarPanels={false}
         layoutVersion="v2"
+        navbarSlot={
+          <EditorAppHeader
+            name={sceneName}
+            onNameChange={handleNameChange}
+            saveStatus={saveStatus}
+            variant="scene"
+          />
+        }
         onLoad={handleLoad}
         onSave={handleSave}
+        onSaveStatusChange={setSaveStatus}
         onThumbnailCapture={handleThumb}
         projectId={meta.projectId ?? 'default'}
-        sidebarTabs={SIDEBAR_TABS}
+        sidebarTabs={EDITOR_SIDEBAR_TABS}
         viewerToolbarLeft={<CommunityViewerToolbarLeft />}
         viewerToolbarRight={<CommunityViewerToolbarRight />}
       />

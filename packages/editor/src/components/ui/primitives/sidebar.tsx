@@ -47,7 +47,7 @@ type SidebarStore = {
 export const useSidebarStore = create<SidebarStore>()(
   persist(
     (set) => ({
-      width: 288, // 18rem = 288px
+      width: 400, // Match Golden Papers left-panel default
       setWidth: (width) => {
         if (width < SIDEBAR_COLLAPSE_THRESHOLD) {
           set({ isCollapsed: true })
@@ -64,6 +64,17 @@ export const useSidebarStore = create<SidebarStore>()(
       name: 'sidebar-preferences',
       partialize: (state) => ({ width: state.width, isCollapsed: state.isCollapsed }),
       skipHydration: true,
+      // One-time bump: old store default was 288; match Golden Papers (400).
+      merge: (persisted, current) => {
+        const p = persisted as Partial<SidebarStore> | undefined
+        if (!p) return current
+        const width = p.width === 288 ? 400 : (p.width ?? current.width)
+        return {
+          ...current,
+          ...p,
+          width,
+        }
+      },
     },
   ),
 )

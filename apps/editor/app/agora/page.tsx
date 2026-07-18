@@ -41,7 +41,7 @@ function formatDate(iso: string): string {
   }
 }
 
-export default async function ScenesPage() {
+export default async function AgoraPage() {
   const scenes = await fetchScenes()
 
   return (
@@ -51,19 +51,19 @@ export default async function ScenesPage() {
           <nav className="flex items-center gap-4 text-sm">
             <Link
               className="text-muted-foreground transition-colors hover:text-foreground"
-              href="/"
+              href="/studio"
             >
               Home
             </Link>
             <span className="text-muted-foreground">/</span>
-            <span className="font-medium text-foreground">Scenes</span>
+            <span className="font-medium text-foreground">Agora</span>
           </nav>
           <CreateSceneButton />
         </div>
       </header>
 
       <main className="container mx-auto max-w-5xl px-6 py-12">
-        <h1 className="mb-2 font-bold text-3xl">Your scenes</h1>
+        <h1 className="mb-2 font-bold text-3xl">Agora</h1>
         <p className="mb-8 text-muted-foreground text-sm">
           {scenes.length === 0
             ? 'No scenes yet. Create one to get started.'
@@ -83,7 +83,7 @@ export default async function ScenesPage() {
               <li key={scene.id}>
                 <Link
                   className="group block rounded-xl border border-border/60 bg-background p-4 transition-colors hover:border-border hover:bg-accent/30"
-                  href={`/scene/${scene.id}`}
+                  href={`/studio/${scene.id}`}
                 >
                   <div className="flex aspect-video items-center justify-center overflow-hidden rounded-lg bg-accent/30">
                     {scene.thumbnailUrl ? (

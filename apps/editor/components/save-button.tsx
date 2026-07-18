@@ -38,7 +38,7 @@ export function CreateSceneButton({ label = 'Create new scene' }: { label?: stri
         return
       }
       const meta = (await response.json()) as { id: string }
-      router.push(`/scene/${meta.id}`)
+      router.push(`/studio/${meta.id}`)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create scene')
     } finally {
@@ -125,7 +125,7 @@ export function SaveButton({ sceneId, name, version, getGraph }: SaveButtonProps
         return
       }
       const meta = (await response.json()) as { id: string }
-      router.push(`/scene/${meta.id}`)
+      router.push(`/studio/${meta.id}`)
     } catch (error) {
       setStatus(error instanceof Error ? error.message : 'Save-as failed')
     } finally {
