@@ -2,6 +2,8 @@
 
 A 3D building editor built with React Three Fiber and WebGPU.
 
+**Dot Science / Abstra Space:** this monorepo is the Abstra Space product in the Dot Science ecosystem. Cloud integration and shared Supabase tenancy are documented in [docs/ECOSYSTEM.md](docs/ECOSYSTEM.md).
+
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![npm @pascal-app/core](https://img.shields.io/npm/v/@pascal-app/core?label=%40pascal-app%2Fcore)](https://www.npmjs.com/package/@pascal-app/core)
 [![npm @pascal-app/viewer](https://img.shields.io/npm/v/@pascal-app/viewer?label=%40pascal-app%2Fviewer)](https://www.npmjs.com/package/@pascal-app/viewer)

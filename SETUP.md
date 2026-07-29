@@ -6,6 +6,10 @@
 - Node.js 18+
 - [Bun](https://bun.sh/) 1.3+ (optional — only needed to run the `bun:test` unit test suite)
 
+## Dot Science ecosystem
+
+Abstra Space will join the shared Dot Science backend (`dot-science-ecosystem`). See [docs/ECOSYSTEM.md](docs/ECOSYSTEM.md) before adding cloud Auth or a second database.
+
 ## Quick Start
 
 ```bash
