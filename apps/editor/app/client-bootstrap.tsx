@@ -10,7 +10,8 @@
 // idempotent under HMR.
 import '../lib/bootstrap'
 import type { ReactNode } from 'react'
+import { AuthProvider } from '@/lib/auth-client'
 
 export function ClientBootstrap({ children }: { children: ReactNode }) {
-  return children
+  return <AuthProvider>{children}</AuthProvider>
 }

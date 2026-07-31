@@ -1,0 +1,243 @@
+/* Scoped layout styles for /agora (mirrors IAteneo / workspace dashboard) */
+
+/* Shared brand field — home, /agora, and studio chrome (header + left panel). */
+.brandField {
+    --bg-base: #050508;
+
+    background-color: var(--bg-base);
+    background-image:
+        radial-gradient(ellipse 120% 80% at 50% -10%, rgb(10 94 149 / 0.2) 0%, transparent 55%),
+        radial-gradient(ellipse 90% 70% at 100% 35%, rgb(10 94 149 / 0.14) 0%, transparent 48%),
+        radial-gradient(ellipse 85% 60% at 0% 70%, rgb(10 94 149 / 0.09) 0%, transparent 42%),
+        radial-gradient(1600px 900px at 50% 100%, rgb(5 5 8 / 0.88) 0%, transparent 80%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: auto;
+}
+
+@supports (-webkit-touch-callout: none) {
+    .brandField {
+        background-attachment: scroll;
+    }
+}
+
+.agoraRoot {
+    color: #ffffff;
+    font-family: var(--font-barlow), var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+
+    width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    scroll-behavior: smooth;
+    scroll-padding-top: env(safe-area-inset-top, 0px);
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+@supports (height: 100dvh) {
+    .agoraRoot {
+        height: 100dvh;
+        max-height: 100dvh;
+    }
+}
+
+.agoraRoot::-webkit-scrollbar {
+    display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .agoraRoot {
+        scroll-behavior: auto;
+    }
+}
+
+.agoraTop {
+    flex: 0 0 auto;
+    width: 100%;
+    margin-top: 0;
+    padding-top: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.primaryTabsBar {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border-top: none;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    border-bottom: 0.5px solid rgb(65 102 121 / 0.35);
+}
+
+.primaryTabsBarInner {
+    position: relative;
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+    justify-content: center;
+    padding-left: max(3.25rem, calc(env(safe-area-inset-left, 0px) + 3.25rem));
+    padding-right: max(3.25rem, calc(env(safe-area-inset-right, 0px) + 3.25rem));
+    box-sizing: border-box;
+}
+
+.homeHeaderButton {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    padding-left: max(0.75rem, env(safe-area-inset-left, 0px));
+    pointer-events: none;
+}
+
+.homeHeaderButtonLink {
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    border: 0.5px solid #416679;
+    background-color: #0a1727;
+    color: #ffffff;
+    text-decoration: none;
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, color 0.2s ease;
+}
+
+.homeHeaderButtonLink:hover {
+    background-color: #0b1e33;
+    border-color: #68dbff;
+    color: #68dbff;
+    transform: scale(1.05);
+}
+
+.homeHeaderButtonLink:active {
+    transform: scale(0.95);
+}
+
+.homeHeaderButtonLink:focus-visible {
+    outline: none;
+    border-color: #68dbff;
+    box-shadow: 0 0 0 2px rgba(104, 219, 255, 0.35);
+}
+
+.accountHeaderButton {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    padding-right: max(0.75rem, env(safe-area-inset-right, 0px));
+    pointer-events: none;
+}
+
+.accountHeaderButton > * {
+    pointer-events: auto;
+}
+
+@media (min-width: 640px) {
+    .homeHeaderButton {
+        padding-left: max(1rem, env(safe-area-inset-left, 0px));
+    }
+
+    .accountHeaderButton {
+        padding-right: max(1rem, env(safe-area-inset-right, 0px));
+    }
+}
+
+.absoluteHeader {
+    width: 100vw;
+    min-height: 200px;
+    padding: 1.25rem 1rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.brandEyebrow {
+    margin: 0;
+    font-family: var(--font-barlow), var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 1.25;
+    letter-spacing: 0.38em;
+    text-transform: uppercase;
+    color: rgb(255 255 255 / 0.5);
+}
+
+@media (min-width: 768px) {
+    .brandEyebrow {
+        font-size: 11px;
+        letter-spacing: 0.4em;
+    }
+}
+
+.agoraBody {
+    flex: 1 1 auto;
+    width: 100%;
+    min-height: 0;
+    padding-bottom: 3rem;
+}
+
+.layoutViewer {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100svh;
+    min-height: 100svh;
+    max-height: 100svh;
+    overflow: hidden;
+    padding-top: 0;
+    box-sizing: border-box;
+}
+
+.renderView {
+    flex: 1 1 0;
+    min-height: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+}
+
+.renderView > [data-agora-toolbar] {
+    flex-shrink: 0;
+    position: relative;
+    z-index: 20;
+    transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    border-bottom: 0.5px solid transparent;
+}
+
+/* `.sticky-toolbar` is toggled from the scroll handler once the toolbar reaches the top of the
+ * scrollport — the class is global because it is applied imperatively to the DOM node. */
+.renderView > [data-agora-toolbar]:global(.sticky-toolbar) {
+    background-color: rgb(5 5 8 / 0.72);
+    border-bottom-color: rgb(65 102 121 / 0.35);
+    box-shadow: 0 8px 24px rgb(0 0 0 / 0.35);
+    backdrop-filter: blur(14px) saturate(150%);
+    -webkit-backdrop-filter: blur(14px) saturate(150%);
+}
+
+.renderView > :last-child {
+    flex: 1 1 0;
+    min-height: 0;
+    min-width: 0;
+}

@@ -99,6 +99,27 @@
   --workspace: oklch(0.965 0.002 264);
 }
 
+/* Shared brand field — studio chrome (header + left panel). Matches Golden Papers. */
+.brand-field {
+  --bg-base: #050508;
+
+  background-color: var(--bg-base);
+  background-image:
+    radial-gradient(ellipse 120% 80% at 50% -10%, rgb(10 94 149 / 0.2) 0%, transparent 55%),
+    radial-gradient(ellipse 90% 70% at 100% 35%, rgb(10 94 149 / 0.14) 0%, transparent 48%),
+    radial-gradient(ellipse 85% 60% at 0% 70%, rgb(10 94 149 / 0.09) 0%, transparent 42%),
+    radial-gradient(1600px 900px at 50% 100%, rgb(5 5 8 / 0.88) 0%, transparent 80%);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: auto;
+}
+
+@supports (-webkit-touch-callout: none) {
+  .brand-field {
+    background-attachment: scroll;
+  }
+}
+
 .dark {
   /* Near-black chrome: header, dialogs (matches Golden Papers) */
   --background: oklch(0.06 0 0);
@@ -439,4 +460,54 @@
       50% 0,
       100% 100%;
   }
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.project-selection-slide-content {
+  will-change: filter, opacity, transform;
+}
+
+.project-selection-snap-mask {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 10%,
+    #000 90%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 10%,
+    #000 90%,
+    transparent 100%
+  );
+}
+
+/**
+ * Dual-layer brand CTA — Abstra red (#FF6868), same structure as
+ * IAteneo cyan / Golden Papers gold buttons.
+ */
+.btn-brand-primary {
+  border: 0.5px solid transparent;
+  background-image:
+    linear-gradient(#1a0808, #1a0808),
+    linear-gradient(135deg, #ffffff 0%, #ff6868 100%);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  color: #ff6868;
+  font-weight: 300;
+  transition:
+    filter 0.15s ease,
+    opacity 0.15s ease;
+}
+.btn-brand-primary:hover:not(:disabled):not([aria-disabled='true']) {
+  filter: brightness(1.1);
 }

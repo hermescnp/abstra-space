@@ -11,6 +11,8 @@
     "check-types": "next typegen && tsgo --noEmit"
   },
   "dependencies": {
+    "@hermescnp/auth": "workspace:*",
+    "@hermescnp/supabase": "workspace:*",
     "@iconify/react": "^6.0.2",
     "@number-flow/react": "^0.6.0",
     "@pascal-app/core": "workspace:*",
@@ -22,6 +24,8 @@
     "@radix-ui/react-tooltip": "^1.2.8",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.5.0",
+    "@supabase/ssr": "^0.6.1",
+    "@supabase/supabase-js": "^2.94.0",
     "@tailwindcss/postcss": "^4.2.1",
     "clsx": "^2.1.1",
     "geist": "^1.7.0",

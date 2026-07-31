@@ -57,7 +57,7 @@ Respect layer boundaries in `AGENTS.md` / `wiki/architecture/`: `packages/core` 
 
 | Area | Status |
 |------|--------|
-| Auth | None in app (ignore unused `BETTER_AUTH_*` / env stubs in Turbo) |
+| Auth | Google via `@hermescnp/auth` + Supabase (`dot-science-ecosystem`); local scenes still work signed out |
 | Persistence | Browser IndexedDB + local SQLite via `@pascal-app/mcp` / `SqliteSceneStore` |
 | API | Local scene REST under `apps/editor/app/api/scenes` |
 | Cloud assets | Some catalog URLs on external Supabase Storage (assets only, not app DB) |
@@ -69,14 +69,14 @@ Respect layer boundaries in `AGENTS.md` / `wiki/architecture/`: `packages/core` 
 
 When Stage 4 runs:
 
-1. Add `@hermescnp/auth` + Supabase clients; enable Google (or shared) sign-in for cloud mode.
+1. ~~Add `@hermescnp/auth` + Supabase clients; enable Google sign-in.~~ **Done** (welcome Space form + account badge).
 2. Implement a `SupabaseSceneStore` (or equivalent) behind the **same interface** as `SqliteSceneStore`; select by config.
 3. Register Spaces as `public.entities` with `entity_kind = 'space'`; metadata in Postgres; large meshes/textures in workspace-scoped Storage (`space-assets`).
 4. Keep offline / local-only mode working with no project configured.
 5. Point `/agora` and `/studio` cloud listings at `entities`-backed queries when online.
 6. Schema PRs go to **`dot-science-ai`**.
 
-Until then: no requirement to wire Supabase Auth; do not invent a product-local Postgres schema for Spaces.
+Local scene create still uses SQLite REST; sign-in is required to create from the welcome form (IAteneo/GP pattern) but does not yet gate cloud persistence.
 
 ---
 

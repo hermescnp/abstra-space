@@ -128,7 +128,7 @@ function LeftColumn({
 
   if (isCollapsed) {
     return (
-      <div className="relative z-10 flex h-full shrink-0 bg-sidebar text-sidebar-foreground">
+      <div className="brand-field relative z-10 flex h-full shrink-0 text-sidebar-foreground">
         <SidebarCollapsedRail
           onExpand={expand}
           onTabClick={expandToTab}
@@ -139,9 +139,9 @@ function LeftColumn({
   }
 
   return (
-    <div className="relative z-10 flex h-full shrink-0 bg-sidebar text-sidebar-foreground">
+    <div className="brand-field relative z-10 flex h-full shrink-0 text-sidebar-foreground">
       <div
-        className="relative flex h-full flex-col border-border/50 border-r"
+        className="relative flex h-full flex-col border-border/50 border-r bg-transparent"
         style={{
           width,
           transition: isDragging ? 'none' : 'width 150ms ease',
@@ -267,20 +267,17 @@ export function EditorLayoutV2({
   }
 
   return (
-    <div className="dark flex h-full w-full flex-col bg-sidebar text-foreground">
+    <div className="dark flex h-full w-full flex-col bg-workspace text-foreground">
       {/* Top navbar: host content only (sidebar tabs live in the left panel) */}
       <header className="relative z-50 h-14 shrink-0 overflow-visible border-border border-b">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80"
-        />
+        <div aria-hidden className="brand-field pointer-events-none absolute inset-0" />
         <div className="relative flex h-full items-center gap-3 overflow-visible px-4">
           <div className="min-w-0 flex-1">{navbarSlot}</div>
         </div>
       </header>
 
       {/* Main content: left column + right column */}
-      <div className="flex min-h-0 flex-1">
+      <div className="flex min-h-0 flex-1 bg-workspace">
         {showSidebar && (
           <LeftColumn
             renderTabContent={renderTabContent}

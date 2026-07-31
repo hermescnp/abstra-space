@@ -15,6 +15,8 @@ const nextConfig: NextConfig = {
     '@pascal-app/mcp',
     '@pascal-app/plugin-trees',
     '@dgreenheck/ez-tree',
+    '@hermescnp/auth',
+    '@hermescnp/supabase',
   ],
   turbopack: {
     resolveAlias: {

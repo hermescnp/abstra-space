@@ -16,6 +16,11 @@ type PlaceholderHeaderDrawerProps = {
   iconSrc?: string
   /** Render the trigger as a round avatar button instead of an icon tile. */
   avatarSrc?: string
+  /**
+   * Golden Papers studio account trigger: 40×40 rounded-xl dark tile with
+   * Lucide user icon (signed-out look).
+   */
+  variant?: 'default' | 'account'
 }
 
 export function PlaceholderHeaderDrawer({
@@ -23,6 +28,7 @@ export function PlaceholderHeaderDrawer({
   icon: Icon,
   iconSrc,
   avatarSrc,
+  variant = 'default',
 }: PlaceholderHeaderDrawerProps) {
   const [open, setOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
@@ -52,58 +58,78 @@ export function PlaceholderHeaderDrawer({
     }
   }, [open])
 
-  const trigger = avatarSrc ? (
-    <button
-      aria-expanded={open}
-      aria-label={label}
-      aria-pressed={open}
-      className={cn(
-        'relative flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full border border-border bg-muted',
-        'ring-offset-background transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-      )}
-      onClick={() => setOpen((current) => !current)}
-      type="button"
-    >
-      <Image
-        alt=""
-        aria-hidden
-        className="h-full w-full object-cover object-[center_20%]"
-        height={32}
-        src={avatarSrc}
-        unoptimized
-        width={32}
-      />
-    </button>
-  ) : (
-    <button
-      aria-expanded={open}
-      aria-label={label}
-      aria-pressed={open}
-      className={cn(
-        'group flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-all duration-200',
-        '[&_img]:transition-[opacity,filter] [&_img]:duration-200',
-        open
-          ? 'bg-accent text-foreground shadow-sm [&_img]:opacity-100 [&_img]:grayscale-0'
-          : 'text-muted-foreground hover:bg-accent/50 hover:text-foreground [&_img]:opacity-60 [&_img]:grayscale hover:[&_img]:opacity-100 hover:[&_img]:grayscale-0',
-      )}
-      onClick={() => setOpen((current) => !current)}
-      type="button"
-    >
-      {iconSrc ? (
+  const trigger =
+    variant === 'account' ? (
+      <button
+        aria-expanded={open}
+        aria-label={label}
+        aria-pressed={open}
+        className={cn(
+          'relative flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-xl',
+          'border-[0.5px] border-[#416679] bg-[#0A1727] text-white transition-all duration-200',
+          'hover:scale-105 hover:border-[#68DBFF] hover:bg-black/20',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#68DBFF]/45',
+          'active:scale-95',
+          open && 'border-[#68DBFF]',
+        )}
+        onClick={() => setOpen((current) => !current)}
+        title="Account"
+        type="button"
+      >
+        <Icon aria-hidden className="size-5" strokeWidth={1.5} />
+      </button>
+    ) : avatarSrc ? (
+      <button
+        aria-expanded={open}
+        aria-label={label}
+        aria-pressed={open}
+        className={cn(
+          'relative flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full border border-border bg-muted',
+          'ring-offset-background transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+        )}
+        onClick={() => setOpen((current) => !current)}
+        type="button"
+      >
         <Image
           alt=""
           aria-hidden
-          className="h-8 w-8 object-contain"
+          className="h-full w-full object-cover object-[center_20%]"
           height={32}
-          src={iconSrc}
+          src={avatarSrc}
           unoptimized
           width={32}
         />
-      ) : (
-        <Icon className="h-6 w-6" />
-      )}
-    </button>
-  )
+      </button>
+    ) : (
+      <button
+        aria-expanded={open}
+        aria-label={label}
+        aria-pressed={open}
+        className={cn(
+          'group flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-all duration-200',
+          '[&_img]:transition-[opacity,filter] [&_img]:duration-200',
+          open
+            ? 'bg-accent text-foreground shadow-sm [&_img]:opacity-100 [&_img]:grayscale-0'
+            : 'text-muted-foreground hover:bg-accent/50 hover:text-foreground [&_img]:opacity-60 [&_img]:grayscale hover:[&_img]:opacity-100 hover:[&_img]:grayscale-0',
+        )}
+        onClick={() => setOpen((current) => !current)}
+        type="button"
+      >
+        {iconSrc ? (
+          <Image
+            alt=""
+            aria-hidden
+            className="h-8 w-8 object-contain"
+            height={32}
+            src={iconSrc}
+            unoptimized
+            width={32}
+          />
+        ) : (
+          <Icon className="h-6 w-6" />
+        )}
+      </button>
+    )
 
   return (
     <>

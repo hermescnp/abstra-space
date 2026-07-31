@@ -64,7 +64,7 @@ interface PanelTabsProps {
 export function SidebarPanelTabs({ tabs, activeTab, onTabChange, onCollapse }: PanelTabsProps) {
   const cols = Math.max(tabs.length, 1)
   return (
-    <div className="relative z-10 flex shrink-0 items-center gap-1 border-border border-b bg-sidebar px-2 py-2 shadow-[0_4px_24px_rgba(15,23,42,0.10),0_16px_48px_rgba(15,23,42,0.08)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.40),0_16px_48px_rgba(0,0,0,0.28)]">
+    <div className="relative z-10 flex shrink-0 items-center gap-1 border-border border-b bg-transparent px-2 py-2 shadow-[0_4px_24px_rgba(15,23,42,0.10),0_16px_48px_rgba(15,23,42,0.08)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.40),0_16px_48px_rgba(0,0,0,0.28)]">
       <div
         className="grid min-w-0 flex-1 gap-1"
         style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}
@@ -130,7 +130,7 @@ interface CollapsedRailProps {
  */
 export function SidebarCollapsedRail({ tabs, onExpand, onTabClick }: CollapsedRailProps) {
   return (
-    <div className="flex h-full w-10 flex-col border-border border-r bg-sidebar">
+    <div className="flex h-full w-10 flex-col border-border border-r bg-transparent">
       <div className="flex shrink-0 justify-center border-border border-b px-1 py-2">
         <TooltipProvider delayDuration={0} disableHoverableContent>
           <Tooltip>

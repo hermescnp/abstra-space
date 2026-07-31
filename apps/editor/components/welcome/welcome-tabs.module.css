@@ -1,0 +1,173 @@
+/* Mirrors IAteneo agora primary / welcome tab chrome */
+
+.primaryTabsBar {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border-top: none;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  border-bottom: 0.5px solid rgb(65 102 121 / 0.35);
+}
+
+.tabsOuter {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  padding: 0 1.25rem 0.5rem;
+}
+
+.tabsStripWrap {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+}
+
+.tabsStripWrap .tabsContainer {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+}
+
+.tabsContainer {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: auto;
+  height: 100%;
+  transition: all 0.3s ease;
+}
+
+.tabsStrip {
+  display: grid;
+  height: 40px;
+  width: min(100%, 450px);
+  max-width: 100%;
+  box-sizing: border-box;
+  vertical-align: middle;
+  border: 0.5px solid #416679;
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  transition: border 0.3s ease;
+  overflow: hidden;
+}
+
+.tab {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  padding: 0 16px;
+  background: none;
+  border: none;
+  border-right: 0.5px solid #416679;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #ffffff;
+  font-family: var(--font-barlow), var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 300;
+}
+
+.tab:last-child {
+  border-right: none;
+}
+
+.tab:hover:not(.tabSelected) {
+  background-color: #0b1e33;
+}
+
+.tabSelected {
+  position: relative;
+  isolation: isolate;
+  background-color: #0a1727;
+}
+
+.tabSelected::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(
+    circle 3.5rem at 50% calc(100% + 14px),
+    rgb(104 219 255 / 0.78) 0%,
+    rgb(104 219 255 / 0.45) 18%,
+    rgb(104 219 255 / 0.2) 38%,
+    rgb(104 219 255 / 0.06) 58%,
+    transparent 76%
+  );
+}
+
+.tabDark {
+  flex-direction: row;
+  gap: 6px;
+  background-color: rgba(3, 8, 16, 0.92);
+}
+
+.tabDark:not(.tabSelected):hover {
+  background-color: rgba(14, 28, 48, 0.98);
+}
+
+.tabDark.tabSelected {
+  background-color: #0a1727;
+}
+
+.tabLabel {
+  opacity: 0.7;
+  transition: opacity 0.3s ease, font-weight 0.2s ease;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tabDark .tabLabel {
+  opacity: 0.95;
+}
+
+.tab:hover:not(.tabSelected) .tabLabel {
+  opacity: 1;
+}
+
+.tabSelected .tabLabel {
+  position: relative;
+  z-index: 1;
+  opacity: 1;
+  font-weight: 600;
+}
+
+.tabIcon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  opacity: 0.95;
+}
+
+.tabSelected .tabIcon {
+  position: relative;
+  z-index: 1;
+}
+
+.tabIcon svg {
+  display: block;
+}
+
+@media (min-width: 900px) {
+  .tab {
+    font-size: 12px;
+  }
+}
