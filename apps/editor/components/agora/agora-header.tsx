@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { Landmark } from 'lucide-react'
+import { Plus } from 'lucide-react'
 
 import { BRAND_TITLE_HEX, BRAND_TITLE_RGB } from '@/lib/brand-hero-background'
 
@@ -32,10 +32,10 @@ export function AgoraHeader({
             <Link
               href="/"
               className={layoutStyles.homeHeaderButtonLink}
-              aria-label="Go to home"
-              title="Home"
+              aria-label="Create a space"
+              title="Create"
             >
-              <Landmark size={18} strokeWidth={1.75} aria-hidden />
+              <Plus size={18} strokeWidth={1.75} aria-hidden />
             </Link>
           </div>
           <AgoraPrimaryTabs mainTab={mainTab} onMainTabChange={onMainTabChange} />

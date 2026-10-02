@@ -2,6 +2,3 @@ packages:
   - 'apps/*'
   - 'packages/*'
   - 'tooling/*'
-  # Dot Science shared auth (sibling checkout)
-  - '../dot-science-ai/packages/supabase'
-  - '../dot-science-ai/packages/auth'

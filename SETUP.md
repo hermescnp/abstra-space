@@ -8,7 +8,7 @@
 
 ## Dot Science ecosystem
 
-Abstra Space will join the shared Dot Science backend (`dot-science-ecosystem`). See [docs/ECOSYSTEM.md](docs/ECOSYSTEM.md) before adding cloud Auth or a second database.
+Abstra Space will join the shared Dot Science backend (`Dot Science Core`). See [docs/ECOSYSTEM.md](docs/ECOSYSTEM.md) before adding cloud Auth or a second database.
 
 ## Quick Start
 

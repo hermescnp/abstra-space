@@ -165,7 +165,7 @@
   display: inline-grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   border: 1px solid transparent;
-  border-radius: 9999px;
+  border-radius: 12px;
   background:
     linear-gradient(oklch(0.1 0.01 260), oklch(0.1 0.01 260)) padding-box,
     linear-gradient(
@@ -184,7 +184,7 @@
   bottom: 3px;
   left: 3px;
   width: calc((100% - 6px) / 2);
-  border-radius: 9999px;
+  border-radius: 8px;
   background: linear-gradient(
     to right,
     var(--editor-mode-gradient-start),
@@ -200,10 +200,10 @@
   position: relative;
   z-index: 1;
   min-width: 5.75rem;
-  height: 1.75rem;
+  height: 2rem;
   padding: 0 0.875rem;
   border: 0;
-  border-radius: 9999px;
+  border-radius: 8px;
   background: transparent;
   color: var(--muted-foreground);
   font-size: 0.8125rem;

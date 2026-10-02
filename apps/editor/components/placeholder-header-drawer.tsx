@@ -1,19 +1,22 @@
 'use client'
 
-import type { LucideIcon } from 'lucide-react'
 import { X } from 'lucide-react'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { type ComponentType, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { cn } from '@/lib/utils'
 import { Tooltip, TooltipContent, TooltipTrigger } from './toolbar-tooltip'
 
+type HeaderIcon = ComponentType<{
+  className?: string
+  strokeWidth?: number
+  'aria-hidden'?: boolean
+}>
+
 type PlaceholderHeaderDrawerProps = {
   label: string
-  /** Lucide icon shown in the drawer header. */
-  icon: LucideIcon
-  /** Illustrated PNG for the trigger button (Golden Papers header style). */
-  iconSrc?: string
+  /** Glyph shown in the trigger button and the drawer header. */
+  icon: HeaderIcon
   /** Render the trigger as a round avatar button instead of an icon tile. */
   avatarSrc?: string
   /**
@@ -26,7 +29,6 @@ type PlaceholderHeaderDrawerProps = {
 export function PlaceholderHeaderDrawer({
   label,
   icon: Icon,
-  iconSrc,
   avatarSrc,
   variant = 'default',
 }: PlaceholderHeaderDrawerProps) {
@@ -107,27 +109,14 @@ export function PlaceholderHeaderDrawer({
         aria-pressed={open}
         className={cn(
           'group flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-all duration-200',
-          '[&_img]:transition-[opacity,filter] [&_img]:duration-200',
           open
-            ? 'bg-accent text-foreground shadow-sm [&_img]:opacity-100 [&_img]:grayscale-0'
-            : 'text-muted-foreground hover:bg-accent/50 hover:text-foreground [&_img]:opacity-60 [&_img]:grayscale hover:[&_img]:opacity-100 hover:[&_img]:grayscale-0',
+            ? 'bg-accent text-foreground shadow-sm'
+            : 'text-muted-foreground hover:bg-accent/50 hover:text-foreground',
         )}
         onClick={() => setOpen((current) => !current)}
         type="button"
       >
-        {iconSrc ? (
-          <Image
-            alt=""
-            aria-hidden
-            className="h-8 w-8 object-contain"
-            height={32}
-            src={iconSrc}
-            unoptimized
-            width={32}
-          />
-        ) : (
-          <Icon className="h-6 w-6" />
-        )}
+        <Icon aria-hidden />
       </button>
     )
 

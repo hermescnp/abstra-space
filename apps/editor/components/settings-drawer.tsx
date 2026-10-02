@@ -1,11 +1,11 @@
 'use client'
 
 import { SettingsPanel, type SettingsPanelProps } from '@pascal-app/editor'
-import { Settings, X } from 'lucide-react'
-import Image from 'next/image'
+import { X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { cn } from '@/lib/utils'
+import { SettingsGlyph } from './header-glyphs'
 import { Tooltip, TooltipContent, TooltipTrigger } from './toolbar-tooltip'
 
 const HEADER_HEIGHT_CLASS = 'top-14'
@@ -53,23 +53,14 @@ export function SettingsDrawer(props: SettingsDrawerProps) {
             aria-pressed={open}
             className={cn(
               'group flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-all duration-200',
-              '[&_img]:transition-[opacity,filter] [&_img]:duration-200',
               open
-                ? 'bg-accent text-foreground shadow-sm [&_img]:opacity-100 [&_img]:grayscale-0'
-                : 'text-muted-foreground hover:bg-accent/50 hover:text-foreground [&_img]:opacity-60 [&_img]:grayscale hover:[&_img]:opacity-100 hover:[&_img]:grayscale-0',
+                ? 'bg-accent text-foreground shadow-sm'
+                : 'text-muted-foreground hover:bg-accent/50 hover:text-foreground',
             )}
             onClick={() => setOpen((current) => !current)}
             type="button"
           >
-            <Image
-              alt=""
-              aria-hidden
-              className="h-8 w-8 object-contain"
-              height={32}
-              src="/icons/settings-v2.png"
-              unoptimized
-              width={32}
-            />
+            <SettingsGlyph />
           </button>
         </TooltipTrigger>
         <TooltipContent side="bottom">Settings</TooltipContent>
@@ -96,7 +87,7 @@ export function SettingsDrawer(props: SettingsDrawerProps) {
               >
                 <div className="flex shrink-0 items-center justify-between gap-2 border-border border-b px-4 py-3">
                   <div className="flex min-w-0 items-center gap-2">
-                    <Settings className="h-5 w-5 shrink-0 text-muted-foreground" />
+                    <SettingsGlyph className="h-5 w-5 shrink-0 text-muted-foreground" />
                     <h2 className="truncate font-semibold text-sm">Settings</h2>
                   </div>
                   <button

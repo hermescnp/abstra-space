@@ -1,26 +1,15 @@
 'use client'
 
 import type { SaveStatus, SettingsPanelProps } from '@pascal-app/editor'
-import {
-  BookMarked,
-  Brain,
-  Cloud,
-  CloudAlert,
-  CloudCheck,
-  CloudOff,
-  GitBranch,
-  Landmark,
-  Loader2,
-  MessageSquare,
-  User,
-} from 'lucide-react'
+import { Box, Cloud, CloudAlert, CloudCheck, CloudOff, Landmark, Loader2, Plus, User } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { cn } from '@/lib/utils'
 import { EditorModeToggle } from './editor-mode-toggle'
+import { BrandingGlyph, CommentsGlyph, DeriveGlyph, KnowledgeGlyph } from './header-glyphs'
 import { PlaceholderHeaderDrawer } from './placeholder-header-drawer'
 import { SettingsDrawer } from './settings-drawer'
-import { ShareMenu } from './share-menu'
+import { ExportMenu } from './export-menu'
 import { Tooltip, TooltipContent, TooltipTrigger } from './toolbar-tooltip'
 
 type EditorAppHeaderProps = {
@@ -78,6 +67,13 @@ function saveStatusMeta(status: SaveStatus | undefined): {
   }
 }
 
+const headerGroupItemClassName = cn(
+  'flex w-10 items-center justify-center text-white transition-colors duration-200',
+  'hover:bg-[#0B1E33] hover:text-[#68DBFF] active:bg-[#0D2640]',
+  'focus-visible:bg-[#0B1E33] focus-visible:text-[#68DBFF] focus-visible:outline-none',
+  'focus-visible:shadow-[inset_0_0_0_2px_rgba(104,219,255,0.35)]',
+)
+
 /**
  * Left-side header content (home + scene title) plus Settings drawer trigger
  * on the right of the name field (Golden Papers Document-panel pattern).
@@ -118,27 +114,36 @@ export function EditorAppHeader({
   return (
     <div className="grid min-w-0 grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 overflow-visible">
       <div className="flex min-w-0 items-center gap-3 overflow-visible">
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Link
-              aria-label="Back to scenes"
-              className={cn(
-                'flex size-10 shrink-0 items-center justify-center rounded-xl border-[0.5px] border-[#416679]',
-                'bg-[#0A1727] text-white transition-all duration-200',
-                'hover:scale-105 hover:border-[#68DBFF] hover:bg-[#0B1E33] hover:text-[#68DBFF]',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#68DBFF]/45',
-                'active:scale-95',
-              )}
-              href="/agora"
-              title="Home"
-            >
-              <Landmark aria-hidden size={18} strokeWidth={1.75} />
-            </Link>
-          </TooltipTrigger>
-          <TooltipContent side="bottom">Back to scenes</TooltipContent>
-        </Tooltip>
+        <div
+          className={cn(
+            'flex h-10 shrink-0 items-stretch overflow-hidden rounded-xl border-[0.5px] border-[#416679]',
+            'bg-[#0A1727] transition-colors duration-200 hover:border-[#68DBFF]',
+          )}
+        >
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link aria-label="Create a space" className={headerGroupItemClassName} href="/">
+                <Plus aria-hidden size={18} strokeWidth={1.75} />
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">Create</TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link
+                aria-label="Go to the Agora"
+                className={cn(headerGroupItemClassName, 'border-l-[0.5px] border-[#416679]')}
+                href="/agora"
+              >
+                <Landmark aria-hidden size={18} strokeWidth={1.75} />
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">Agora</TooltipContent>
+          </Tooltip>
+        </div>
 
-        <div className="flex min-w-0 max-w-xl flex-1 items-center gap-2 overflow-hidden rounded-lg border border-border/60 bg-background/70 px-3">
+        <div className="flex h-10 min-w-0 max-w-xl flex-1 items-center gap-2 overflow-hidden rounded-xl border border-border/60 bg-background/70 px-3">
+          <Box aria-hidden className="h-4 w-4 shrink-0 text-muted-foreground" />
           <input
             aria-label="Scene name"
             className={cn(
@@ -182,11 +187,11 @@ export function EditorAppHeader({
       <EditorModeToggle className="shrink-0 justify-self-center" />
 
       <div className="flex min-w-0 items-center justify-end gap-2">
-        <PlaceholderHeaderDrawer icon={MessageSquare} iconSrc="/icons/comments.png" label="Comments" />
-        <PlaceholderHeaderDrawer icon={Brain} iconSrc="/icons/knowledge.png" label="Knowledge" />
-        <PlaceholderHeaderDrawer icon={BookMarked} iconSrc="/icons/branding.png" label="Branding" />
-        <PlaceholderHeaderDrawer icon={GitBranch} iconSrc="/icons/derive.png?v=live7" label="Derive" />
-        <ShareMenu />
+        <PlaceholderHeaderDrawer icon={CommentsGlyph} label="Comments" />
+        <PlaceholderHeaderDrawer icon={KnowledgeGlyph} label="Knowledge" />
+        <PlaceholderHeaderDrawer icon={BrandingGlyph} label="Branding" />
+        <PlaceholderHeaderDrawer icon={DeriveGlyph} label="Derive" />
+        <ExportMenu />
         <SettingsDrawer {...settingsPanelProps} />
         <PlaceholderHeaderDrawer icon={User} label="User account" variant="account" />
       </div>

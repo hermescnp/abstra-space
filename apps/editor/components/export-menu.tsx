@@ -7,9 +7,10 @@ import {
   DropdownMenuTrigger,
 } from '@pascal-app/editor'
 import { useViewer } from '@pascal-app/viewer'
-import { ClipboardCheck, Download, Eye, Share2 } from 'lucide-react'
+import { Download } from 'lucide-react'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
+import { ExportGlyph } from './header-glyphs'
 import { Tooltip, TooltipContent, TooltipTrigger } from './toolbar-tooltip'
 
 const EXPORT_OPTIONS = [
@@ -18,7 +19,7 @@ const EXPORT_OPTIONS = [
   { format: 'obj', label: 'Export OBJ' },
 ] as const
 
-export function ShareMenu() {
+export function ExportMenu() {
   const [open, setOpen] = useState(false)
   const exportScene = useViewer((state) => state.exportScene)
 
@@ -29,32 +30,24 @@ export function ShareMenu() {
           <span className="inline-flex">
             <DropdownMenuTrigger asChild>
               <button
-                aria-label="Share"
+                aria-label="Export"
                 className={cn(
                   'group flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-all duration-200',
                   open
-                    ? 'bg-accent text-primary shadow-sm'
-                    : 'text-muted-foreground hover:bg-accent/50 hover:text-primary',
+                    ? 'bg-accent text-foreground shadow-sm'
+                    : 'text-muted-foreground hover:bg-accent/50 hover:text-foreground',
                 )}
                 type="button"
               >
-                <Share2 className="h-6 w-6" />
+                <ExportGlyph />
               </button>
             </DropdownMenuTrigger>
           </span>
         </TooltipTrigger>
-        <TooltipContent side="bottom">Share</TooltipContent>
+        <TooltipContent side="bottom">Export</TooltipContent>
       </Tooltip>
 
       <DropdownMenuContent align="end">
-        <DropdownMenuItem className="flex items-center gap-2" disabled>
-          <ClipboardCheck className="h-4 w-4" />
-          Reviewer
-        </DropdownMenuItem>
-        <DropdownMenuItem className="flex items-center gap-2" disabled>
-          <Eye className="h-4 w-4" />
-          Scene Viewer
-        </DropdownMenuItem>
         {EXPORT_OPTIONS.map(({ format, label }) => (
           <DropdownMenuItem
             className="flex items-center gap-2"

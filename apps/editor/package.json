@@ -11,8 +11,8 @@
     "check-types": "next typegen && tsgo --noEmit"
   },
   "dependencies": {
-    "@hermescnp/auth": "workspace:*",
-    "@hermescnp/supabase": "workspace:*",
+    "@hermescnp/auth": "file:../../../dot-science-ai/packages/auth",
+    "@hermescnp/supabase": "file:../../../dot-science-ai/packages/supabase",
     "@iconify/react": "^6.0.2",
     "@number-flow/react": "^0.6.0",
     "@pascal-app/core": "workspace:*",

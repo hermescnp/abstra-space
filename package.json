@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
-    "dev": "set -a; [ -f .env ] && . ./.env; set +a; turbo run dev --env-mode=loose",
+    "dev": "set -a; [ -f .env ] && . ./.env; set +a; echo \"→ http://localhost:${PORT:-3002}\"; turbo run dev --filter=editor... --ui=stream --env-mode=loose",
     "lint": "biome lint",
     "lint:fix": "biome lint --write",
     "format": "biome format --write",

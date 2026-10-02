@@ -9,9 +9,9 @@ This monorepo (Pascal Editor / Abstra Space) is the **Science’s Laboratory** p
 | Concern | Source of truth |
 |---------|-----------------|
 | **Center repo** | `hermescnp/dot-science-ai` |
-| **Development Supabase project** | **`dot-science-ecosystem`** |
-| **Project ref** | `hhroabzrhglzjlyavkeu` |
-| **Project URL** | `https://hhroabzrhglzjlyavkeu.supabase.co` |
+| **Development Supabase project** | **`Dot Science Core`** |
+| **Project ref** | `jbivrtvhyczkmqjjssdr` |
+| **Project URL** | `https://jbivrtvhyczkmqjjssdr.supabase.co` |
 | **Shared packages** | `@hermescnp/supabase`, `@hermescnp/auth`, `@hermescnp/workspace-sdk` |
 | **Schema** | Only in `dot-science-ai/supabase/migrations/` — never fork migrations here |
 
@@ -57,7 +57,7 @@ Respect layer boundaries in `AGENTS.md` / `wiki/architecture/`: `packages/core` 
 
 | Area | Status |
 |------|--------|
-| Auth | Google via `@hermescnp/auth` + Supabase (`dot-science-ecosystem`); local scenes still work signed out |
+| Auth | Google via `@hermescnp/auth` + Supabase (`Dot Science Core`); local scenes still work signed out |
 | Persistence | Browser IndexedDB + local SQLite via `@pascal-app/mcp` / `SqliteSceneStore` |
 | API | Local scene REST under `apps/editor/app/api/scenes` |
 | Cloud assets | Some catalog URLs on external Supabase Storage (assets only, not app DB) |

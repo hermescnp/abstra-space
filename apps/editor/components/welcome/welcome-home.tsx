@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import { Globe } from 'lucide-react'
+import { Landmark } from 'lucide-react'
 import { AgoraSelectionSlide } from '@/components/welcome/agora-selection-slide'
 import { HostAccountBadge } from '@/components/welcome/host-account-badge'
 import { ProjectSelectionSlides } from '@/components/welcome/project-selection-slides'
@@ -63,7 +63,7 @@ export function WelcomeHome() {
                 {
                   key: 'explore',
                   label: 'Agora',
-                  icon: <Globe size={14} strokeWidth={1.75} aria-hidden />,
+                  icon: <Landmark size={14} strokeWidth={1.75} aria-hidden />,
                   variant: 'darkCenter',
                 },
                 { key: 'about', label: 'About' },
