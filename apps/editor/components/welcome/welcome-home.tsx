@@ -2,8 +2,13 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Landmark } from 'lucide-react'
-import { AgoraSelectionSlide } from '@/components/welcome/agora-selection-slide'
+import agoraLayoutStyles from '@/components/agora/agora-layout.module.css'
+import { AgoraPlatformCatalogMenu } from '@/components/agora/agora-platform-catalog-menu'
+import { AgoraPrimaryTabs, type AgoraMainTab } from '@/components/agora/agora-primary-tabs'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/toolbar-tooltip'
 import { HostAccountBadge } from '@/components/welcome/host-account-badge'
 import { ProjectSelectionSlides } from '@/components/welcome/project-selection-slides'
 import { WelcomeHeroBackground } from '@/components/welcome/welcome-hero-background'
@@ -11,10 +16,12 @@ import { WelcomeSegmentedTabs } from '@/components/welcome/welcome-segmented-tab
 import { WelcomeSpaceForm } from '@/components/welcome/welcome-space-form'
 import { WelcomeTaglineDivider } from '@/components/welcome/welcome-tagline-divider'
 import tabStyles from '@/components/welcome/welcome-tabs.module.css'
+import { WelcomeVoiceBot } from '@/components/welcome/welcome-voice-bot'
+import { useAuth } from '@/lib/auth-client'
 import { BRAND_HERO_BASE } from '@/lib/brand-hero-background'
 import { cn } from '@/lib/utils'
 
-type WelcomeTab = 'space' | 'explore' | 'about'
+type WelcomeTab = 'space' | 'about'
 
 function WelcomeBrandMark({ showWelcomeBadge = false }: { showWelcomeBadge?: boolean }) {
   return (
@@ -37,8 +44,16 @@ function WelcomeBrandMark({ showWelcomeBadge = false }: { showWelcomeBadge?: boo
 }
 
 export function WelcomeHome() {
-  const [welcomeTab, setWelcomeTab] = useState<WelcomeTab>('space')
-  const isSlideTab = welcomeTab === 'about' || welcomeTab === 'explore'
+  const router = useRouter()
+  const { user } = useAuth()
+  const isSignedIn = Boolean(user)
+  const [selectedWelcomeTab, setWelcomeTab] = useState<WelcomeTab>('space')
+  const welcomeTab: WelcomeTab = isSignedIn ? 'space' : selectedWelcomeTab
+  const isSlideTab = welcomeTab === 'about'
+
+  const openAgoraTab = (tab: AgoraMainTab) => {
+    router.push(`/agora?tab=${tab}`)
+  }
 
   return (
     <div
@@ -55,22 +70,35 @@ export function WelcomeHome() {
         aria-label="Welcome sections"
       >
         <div className="relative flex w-full items-stretch justify-center">
-          <div className="w-full min-w-0 pl-4 pr-14 sm:pl-5 sm:pr-16 md:px-6">
-            <WelcomeSegmentedTabs
-              className="flex w-full justify-center"
-              tabs={[
-                { key: 'space', label: 'Space' },
-                {
-                  key: 'explore',
-                  label: 'Agora',
-                  icon: <Landmark size={14} strokeWidth={1.75} aria-hidden />,
-                  variant: 'darkCenter',
-                },
-                { key: 'about', label: 'About' },
-              ]}
-              active={welcomeTab}
-              onSelect={setWelcomeTab}
-            />
+          <div className={agoraLayoutStyles.homeHeaderButton}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link href="/agora" className={agoraLayoutStyles.homeHeaderButtonLink} aria-label="Go to the Agora">
+                  <Landmark size={18} strokeWidth={1.75} aria-hidden />
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">Agora</TooltipContent>
+            </Tooltip>
+            <AgoraPlatformCatalogMenu />
+          </div>
+          {/* Phones keep only the botface; `invisible` holds the bar height the botface hangs from. */}
+          <div className="w-full min-w-0 px-[6.5rem] max-lg:invisible">
+            {isSignedIn ? (
+              <AgoraPrimaryTabs mainTab={null} onMainTabChange={openAgoraTab} />
+            ) : (
+              <WelcomeSegmentedTabs
+                className="flex w-full justify-center"
+                tabs={[
+                  { key: 'space', label: 'Space' },
+                  { key: 'about', label: 'About' },
+                ]}
+                active={welcomeTab}
+                onSelect={setWelcomeTab}
+              />
+            )}
+          </div>
+          <div className="pointer-events-none absolute left-1/2 top-full z-20 -translate-x-1/2 -translate-y-[80%]">
+            <WelcomeVoiceBot />
           </div>
           <div className="pointer-events-none absolute inset-y-0 right-0 z-10 flex items-center pr-3 sm:pr-4">
             <div className="pointer-events-auto">
@@ -91,7 +119,7 @@ export function WelcomeHome() {
         {welcomeTab === 'space' ? (
           <>
             <div className="flex min-h-0 w-full flex-1 flex-col items-center justify-center lg:flex-none">
-              <div className="lg:mb-10">
+              <div className="pt-8 lg:mb-10">
                 <WelcomeBrandMark showWelcomeBadge />
               </div>
             </div>
@@ -127,19 +155,12 @@ export function WelcomeHome() {
 
         {isSlideTab ? (
           <>
-            <div className="mt-5 mb-2 shrink-0 pt-2 lg:mt-8 lg:mb-4 lg:pt-3">
+            <div className="mt-5 mb-2 shrink-0 pt-8 lg:mt-8 lg:mb-4 lg:pt-8">
               <WelcomeBrandMark />
             </div>
-            {welcomeTab === 'explore' ? (
-              <div className="relative z-10 flex h-full min-h-0 w-full flex-1 flex-col">
-                <AgoraSelectionSlide />
-              </div>
-            ) : null}
-            {welcomeTab === 'about' ? (
-              <div className="relative z-10 flex h-full min-h-0 w-full flex-1 flex-col">
-                <ProjectSelectionSlides />
-              </div>
-            ) : null}
+            <div className="relative z-10 flex h-full min-h-0 w-full flex-1 flex-col">
+              <ProjectSelectionSlides />
+            </div>
           </>
         ) : null}
       </div>

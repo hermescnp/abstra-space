@@ -7,6 +7,7 @@ import Image from 'next/image'
 import { cn } from '@/lib/utils'
 
 import styles from './agora-header.module.css'
+import layoutStyles from './agora-layout.module.css'
 
 type CatalogPlatform = {
   id: string
@@ -46,7 +47,7 @@ const CATALOG_PLATFORMS: readonly CatalogPlatform[] = [
 ] as const
 
 /**
- * Agora primary-bar catalog control — grid icon opens a platform picker dropdown.
+ * Agora header catalog control — grid icon opens a platform picker dropdown.
  */
 export function AgoraPlatformCatalogMenu() {
   const rootRef = useRef<HTMLDivElement>(null)
@@ -152,7 +153,7 @@ export function AgoraPlatformCatalogMenu() {
             role="dialog"
             aria-label="Dot Science Ecosystem"
             className={cn(
-              'fixed z-[80] w-[min(22rem,calc(100vw-1.5rem))] overflow-hidden rounded-xl border border-white/12 bg-black/55 p-3 shadow-[0_8px_32px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-xl backdrop-saturate-150',
+              'fixed z-[80] w-[min(22rem,calc(100vw-1.5rem))] overflow-hidden rounded-xl border border-white/12 bg-black/65 p-3 shadow-[0_8px_32px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-xl backdrop-saturate-150',
               closing ? styles.CatalogDropdownPanelExit : styles.CatalogDropdownPanel,
             )}
             style={{ top: menuPos.top, left: menuPos.left }}
@@ -226,16 +227,17 @@ export function AgoraPlatformCatalogMenu() {
       : null
 
   return (
-    <div ref={rootRef} className={styles.PrimaryTabCatalogRoot}>
+    <div ref={rootRef} className="flex">
       <button
         type="button"
         className={cn(
-          styles.PrimaryTabCreateLink,
-          (open || closing) && styles.PrimaryTabCreateLinkOpen,
+          'cursor-pointer',
+          layoutStyles.homeHeaderButtonLink,
+          panelVisible && layoutStyles.homeHeaderButtonLinkOpen,
         )}
         aria-label="Browse Dot Science platforms"
         title="Browse Dot Science platforms"
-        aria-expanded={open || closing}
+        aria-expanded={panelVisible}
         aria-haspopup="dialog"
         onClick={toggle}
       >

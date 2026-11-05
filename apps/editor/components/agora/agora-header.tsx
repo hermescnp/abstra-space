@@ -7,7 +7,9 @@ import { Plus } from 'lucide-react'
 import { BRAND_TITLE_HEX, BRAND_TITLE_RGB } from '@/lib/brand-hero-background'
 
 import { HostAccountBadge } from '@/components/welcome/host-account-badge'
+import { WelcomeVoiceBot } from '@/components/welcome/welcome-voice-bot'
 import layoutStyles from './agora-layout.module.css'
+import { AgoraPlatformCatalogMenu } from './agora-platform-catalog-menu'
 import {
   AgoraPrimaryTabs,
   type AgoraMainTab,
@@ -37,8 +39,12 @@ export function AgoraHeader({
             >
               <Plus size={18} strokeWidth={1.75} aria-hidden />
             </Link>
+            <AgoraPlatformCatalogMenu />
           </div>
           <AgoraPrimaryTabs mainTab={mainTab} onMainTabChange={onMainTabChange} />
+          <div className="pointer-events-none absolute left-1/2 top-full z-20 -translate-x-1/2 -translate-y-[80%]">
+            <WelcomeVoiceBot />
+          </div>
           <div className={layoutStyles.accountHeaderButton}>
             <HostAccountBadge />
           </div>

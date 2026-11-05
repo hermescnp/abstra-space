@@ -1,0 +1,67 @@
+/* Bot face from dot-science-ai's Botface: gradient rim, dark face, two ringed eyes. */
+
+.wrapper {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 2px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from -160deg at 50% 50%,
+    #0a5e95 0deg,
+    #172e49 90deg,
+    #68dbff 180deg,
+    #172e49 270deg,
+    #0a5e95 360deg
+  );
+}
+
+.eyeContainer {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 6%;
+  box-sizing: border-box;
+  overflow: hidden;
+  border-radius: inherit;
+  background-color: #0a1727;
+}
+
+.eye {
+  position: relative;
+  flex: 0 0 auto;
+  width: 44%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+
+.eyeRing {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.pupil {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  background-color: #0a5e95;
+  transform: translate(-50%, -50%);
+  transition: transform 0.2s ease-out;
+}

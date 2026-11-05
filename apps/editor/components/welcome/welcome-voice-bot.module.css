@@ -1,0 +1,11 @@
+.voiceBot {
+  transition: transform 0.45s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+.voiceBot:hover {
+  transform: scale(1.05);
+}
+
+.voiceBotFace {
+  box-shadow: 0 0 20px rgba(45, 174, 198, 0.35);
+}

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import type { User } from '@supabase/supabase-js'
 import { User as UserIcon } from 'lucide-react'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/toolbar-tooltip'
 import { useAuth } from '@/lib/auth-client'
 import { cn } from '@/lib/utils'
 
@@ -259,38 +260,42 @@ export function HostAccountBadge({
 
   return (
     <div ref={rootRef} className={cn('relative', className)}>
-      <button
-        type="button"
-        onClick={() => setMenuOpen((open) => !open)}
-        aria-expanded={menuOpen}
-        aria-haspopup="menu"
-        title={isSignedIn ? label : 'Account'}
-        aria-label={isSignedIn ? `Account menu: ${label}` : 'Account menu'}
-        className={cn(
-          'relative flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-xl',
-          'border-[0.5px] border-[#416679] text-white transition-all duration-200',
-          'hover:scale-105 hover:border-[#68DBFF]',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#68DBFF]/45',
-          'active:scale-95',
-          isSignedIn ? 'bg-[#003563]' : 'bg-[#0A1727] hover:bg-black/20',
-        )}
-      >
-        {photoURL ? (
-          <Image
-            src={photoURL}
-            alt=""
-            width={40}
-            height={40}
-            className="size-full object-cover"
-            unoptimized
-            referrerPolicy="no-referrer"
-          />
-        ) : isSignedIn ? (
-          <InitialAvatar name={label} size={40} rounded="lg" />
-        ) : (
-          <UserIcon className="size-5" strokeWidth={1.5} aria-hidden />
-        )}
-      </button>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <button
+            type="button"
+            onClick={() => setMenuOpen((open) => !open)}
+            aria-expanded={menuOpen}
+            aria-haspopup="menu"
+            aria-label={isSignedIn ? `Account menu: ${label}` : 'Account menu'}
+            className={cn(
+              'relative flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-xl',
+              'border-[0.5px] border-[#416679] text-white transition-all duration-200',
+              'hover:scale-105 hover:border-[#68DBFF]',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#68DBFF]/45',
+              'active:scale-95',
+              isSignedIn ? 'bg-[#003563]' : 'bg-[#0A1727] hover:bg-black/20',
+            )}
+          >
+            {photoURL ? (
+              <Image
+                src={photoURL}
+                alt=""
+                width={40}
+                height={40}
+                className="size-full object-cover"
+                unoptimized
+                referrerPolicy="no-referrer"
+              />
+            ) : isSignedIn ? (
+              <InitialAvatar name={label} size={40} rounded="lg" />
+            ) : (
+              <UserIcon className="size-5" strokeWidth={1.5} aria-hidden />
+            )}
+          </button>
+        </TooltipTrigger>
+        {menuOpen ? null : <TooltipContent side="bottom">{isSignedIn ? label : 'Account'}</TooltipContent>}
+      </Tooltip>
 
       {menuOpen && menuPos ? (
         <div

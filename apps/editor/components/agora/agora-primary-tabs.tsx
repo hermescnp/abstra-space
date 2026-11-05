@@ -1,6 +1,5 @@
 'use client'
 
-import { AgoraPlatformCatalogMenu } from './agora-platform-catalog-menu'
 import styles from './agora-header.module.css'
 
 export type AgoraMainTab = 'spaces' | 'pieces' | 'derived' | 'circles'
@@ -23,12 +22,12 @@ export function parseAgoraMainTabFromSearchParam(
   return null
 }
 
-/** Primary Spaces / Pieces / Derived / Circles strip — used above the hero on `/agora`. */
+/** Primary Spaces / Pieces / Derived / Circles strip — used on `/agora` and the signed-in home. */
 export function AgoraPrimaryTabs({
   mainTab,
   onMainTabChange,
 }: {
-  mainTab: AgoraMainTab
+  mainTab: AgoraMainTab | null
   onMainTabChange: (option: AgoraMainTab) => void
 }) {
   const leftTabs: { value: AgoraMainTab; label: string }[] = [
@@ -54,7 +53,7 @@ export function AgoraPrimaryTabs({
               <span className={styles.SortOptionText}>{option.label}</span>
             </button>
           ))}
-          <AgoraPlatformCatalogMenu />
+          <span className={styles.PrimaryTabCenterSpacer} aria-hidden />
           {rightTabs.map((option) => (
             <button
               key={option.value}

@@ -84,8 +84,9 @@
     width: 100%;
     align-items: stretch;
     justify-content: center;
-    padding-left: max(3.25rem, calc(env(safe-area-inset-left, 0px) + 3.25rem));
-    padding-right: max(3.25rem, calc(env(safe-area-inset-right, 0px) + 3.25rem));
+    /* Symmetric so the tabs stay centered under the bot face; left side holds two buttons. */
+    padding-left: max(6.5rem, calc(env(safe-area-inset-left, 0px) + 6.5rem));
+    padding-right: max(6.5rem, calc(env(safe-area-inset-right, 0px) + 6.5rem));
     box-sizing: border-box;
 }
 
@@ -97,6 +98,7 @@
     z-index: 10;
     display: flex;
     align-items: center;
+    gap: 0.5rem;
     padding-left: max(0.75rem, env(safe-area-inset-left, 0px));
     pointer-events: none;
 }
@@ -125,6 +127,12 @@
 
 .homeHeaderButtonLink:active {
     transform: scale(0.95);
+}
+
+.homeHeaderButtonLinkOpen {
+    background-color: #0b1e33;
+    border-color: #68dbff;
+    color: #68dbff;
 }
 
 .homeHeaderButtonLink:focus-visible {
